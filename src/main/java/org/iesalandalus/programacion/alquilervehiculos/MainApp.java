@@ -6,8 +6,11 @@ import org.iesalandalus.programacion.alquilervehiculos.vista.Vista;
 
 public class MainApp {
 
-	public static void main(String[] args) {
-		// Ánimo!!!!
+	public static void main(String[] args) throws Exception {
+		Vista vista = new Vista();
+		Modelo modelo = new Modelo();
+		Controlador controlador = new Controlador(modelo, vista);
+		controlador.comenzar();
 	}
 
 }
