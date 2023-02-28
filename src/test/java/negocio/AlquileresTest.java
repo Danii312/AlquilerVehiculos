@@ -1,4 +1,4 @@
-package org.iesalandalus.programacion.alquilervehiculos.modelo.negocio;
+package negocio;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,6 +17,7 @@ import javax.naming.OperationNotSupportedException;
 import org.iesalandalus.programacion.alquilervehiculos.modelo.dominio.Alquiler;
 import org.iesalandalus.programacion.alquilervehiculos.modelo.dominio.Cliente;
 import org.iesalandalus.programacion.alquilervehiculos.modelo.dominio.Turismo;
+import org.iesalandalus.programacion.alquilervehiculos.modelo.negocio.Alquileres;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,13 +55,23 @@ public class AlquileresTest {
 		anteayer = hoy.minusDays(2);
 		semanaPasada = hoy.minusDays(7);
 		cliente1 = mock();
+		when(cliente1.getNombre()).thenReturn("Bob Esponja");
 		when(cliente1.getDni()).thenReturn("11223344B");
+		when(cliente1.getTelefono()).thenReturn("923456789");
 		cliente2 = mock();
+		when(cliente2.getNombre()).thenReturn("Bob Esponja");
 		when(cliente2.getDni()).thenReturn("11111111H");
+		when(cliente2.getTelefono()).thenReturn("623456789");
 		turismo1 = mock();
 		when(turismo1.getMatricula()).thenReturn("1234BCD");
+		when(turismo1.getMarca()).thenReturn("Seat");
+		when(turismo1.getCilindrada()).thenReturn(2000);
+		when(turismo1.getModelo()).thenReturn("Ibiza");
 		turismo2 = mock();
 		when(turismo2.getMatricula()).thenReturn("1111BBB");
+		when(turismo2.getMarca()).thenReturn("Seat");
+		when(turismo2.getCilindrada()).thenReturn(3000);
+		when(turismo2.getModelo()).thenReturn("Panda");
 	}
 	
 	@BeforeEach
