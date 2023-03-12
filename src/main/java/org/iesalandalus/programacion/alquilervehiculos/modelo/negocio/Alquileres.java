@@ -7,6 +7,7 @@ import org.iesalandalus.programacion.alquilervehiculos.modelo.dominio.Turismo;
 import javax.naming.OperationNotSupportedException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Alquileres {
@@ -26,30 +27,28 @@ public class Alquileres {
 
     // MÉTODO get cliente
     public List<Alquiler> get(Cliente cliente) {
-        if (cliente == null) {
-            throw new NullPointerException("ERROR: No se puede buscar un cliente nulo.");
-        }
-        List<Alquiler> coleccionCliente = new ArrayList<>();
-        for (Alquiler alquiler : coleccionAlquileres) {
-            if (alquiler.getCliente().equals(cliente)) {
-                coleccionCliente.add(alquiler);
+        ArrayList<Alquiler> alquilerCliente = new ArrayList<>();
+        Iterator<Alquiler> alquilerIterator = coleccionAlquileres.iterator();
+        while (alquilerIterator.hasNext()) {
+            Alquiler clienteAlquiler = alquilerIterator.next();
+            if (clienteAlquiler.getCliente().equals(cliente)) {
+                alquilerCliente.add(clienteAlquiler);
             }
         }
-        return coleccionCliente;
+        return alquilerCliente;
     }
 
     // MÉTODO get turismo
     public List<Alquiler> get(Turismo turismo) {
-        if (turismo == null) {
-            throw new NullPointerException("ERROR: No se puede buscar un turismo nulo.");
-        }
-        List<Alquiler> coleccionTurismo = new ArrayList<>();
-        for (Alquiler alquiler : coleccionAlquileres) {
-            if (alquiler.getTurismo().equals(turismo)) {
-                coleccionTurismo.add(alquiler);
+        ArrayList<Alquiler> alquilerTurismo = new ArrayList<>();
+        Iterator<Alquiler> alquilerIterator = coleccionAlquileres.iterator();
+        while (alquilerIterator.hasNext()) {
+            Alquiler turismoAlquiler = alquilerIterator.next();
+            if (turismoAlquiler.getTurismo().equals(turismo)) {
+                alquilerTurismo.add(turismoAlquiler);
             }
         }
-        return coleccionTurismo;
+        return alquilerTurismo;
     }
 
     // MÉTODO getCantidad
@@ -58,7 +57,7 @@ public class Alquileres {
     }
 
     // MÉTODO insertar
-    public void insertar(Alquiler alquiler) throws OperationNotSupportedException {
+    public void insertar(Alquiler alquiler) throws Exception {
         if (alquiler == null) {
             throw new NullPointerException("ERROR: No se puede insertar un alquiler nulo.");
         }
@@ -68,31 +67,36 @@ public class Alquileres {
     }
 
     // MÉTODO comprobarAlquiler
-    private boolean comprobarAlquiler(Cliente cliente, Turismo turismo, LocalDate fechaAlquiler) throws OperationNotSupportedException {
+    private boolean comprobarAlquiler(Cliente cliente, Turismo turismo, LocalDate fechaAlquiler) throws Exception {
         boolean estadoAlquiler = true;
-        for (Alquiler alquiler2 : coleccionAlquileres) {
-            if ((cliente.equals(alquiler2.getCliente())) && (alquiler2.getFechaDevolucion() == null)) {
-                estadoAlquiler = false;
-                throw new OperationNotSupportedException("ERROR: El cliente tiene otro alquiler sin devolver.");
-            }
-            if ((turismo.equals(alquiler2.getTurismo())) && (alquiler2.getFechaDevolucion() == null)) {
-                estadoAlquiler = false;
-                throw new OperationNotSupportedException("ERROR: El turismo está actualmente alquilado.");
-            }
-            if (cliente.equals(alquiler2.getCliente()) && (alquiler2.getFechaDevolucion().isAfter(fechaAlquiler))) {
-                estadoAlquiler = false;
-                throw new OperationNotSupportedException("ERROR: El cliente tiene un alquiler posterior.");
-            }
-            if (turismo.equals(alquiler2.getTurismo()) && alquiler2.getFechaDevolucion().isAfter(fechaAlquiler)) {
-                estadoAlquiler = false;
-                throw new OperationNotSupportedException("ERROR: El turismo tiene un alquiler posterior.");
+        Iterator<Alquiler> alquilerIterador = coleccionAlquileres.iterator();
+        while (alquilerIterador.hasNext()) {
+            Alquiler alquiler2 = alquilerIterador.next();
+            if (alquiler2.getFechaDevolucion() == null) {
+                if (alquiler2.getCliente().equals(cliente)) {
+                    estadoAlquiler = false;
+                    throw new OperationNotSupportedException("ERROR: El cliente tiene otro alquiler sin devolver.");
+                } else if (alquiler2.getTurismo().equals(turismo)) {
+                    estadoAlquiler = false;
+                    throw new OperationNotSupportedException("ERROR: El turismo está actualmente alquilado.");
+                }
+            } else {
+                if (fechaAlquiler.isEqual(alquiler2.getFechaDevolucion())) {
+                    if (alquiler2.getCliente().equals(cliente)) {
+                        estadoAlquiler = false;
+                        throw new OperationNotSupportedException("ERROR: El cliente tiene un alquiler posterior.");
+                    } else if (alquiler2.getTurismo().equals(turismo) && !alquiler2.getFechaAlquiler().isAfter(fechaAlquiler)) {
+                        estadoAlquiler = false;
+                        throw new OperationNotSupportedException("ERROR: El turismo tiene un alquiler posterior.");
+                    }
+                }
             }
         }
         return estadoAlquiler;
     }
 
     // MÉTODO devolver
-    public void devolver(Alquiler alquiler, LocalDate fechaDevolucion) throws OperationNotSupportedException  {
+    public void devolver(Alquiler alquiler, LocalDate fechaDevolucion) throws OperationNotSupportedException {
         boolean estadoAlquiler = false;
         if (alquiler == null || fechaDevolucion == null) {
             throw new NullPointerException("ERROR: No se puede devolver un alquiler nulo.");
@@ -122,15 +126,18 @@ public class Alquileres {
 
     // MÉTODO buscar
     public Alquiler buscar(Alquiler alquiler) {
+        Alquiler alquiler2 = null;
+        Iterator<Alquiler> iterator = coleccionAlquileres.iterator();
+        while (iterator.hasNext()) {
+            alquiler2 = iterator.next();
+            if (alquiler2.getCliente().getDni().equals(alquiler.getCliente().getDni()) || alquiler2.getTurismo().getMatricula().equals(alquiler.getTurismo().getMatricula())) {
+                return alquiler2;
+            }
+        }
         if (alquiler == null) {
             throw new NullPointerException("ERROR: No se puede buscar un alquiler nulo.");
         }
-        if (coleccionAlquileres.contains(alquiler)) {
-            Alquiler alquiler2 = coleccionAlquileres.get(coleccionAlquileres.indexOf(alquiler));
-            return alquiler2;
-        } else {
-            return null;
-        }
+        return null;
     }
 
 }

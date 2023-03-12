@@ -4,6 +4,7 @@ import org.iesalandalus.programacion.alquilervehiculos.modelo.dominio.Turismo;
 
 import javax.naming.OperationNotSupportedException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Turismos {
@@ -40,13 +41,17 @@ public class Turismos {
     // MÉTODO buscar
     public Turismo buscar(Turismo turismo) {
         Turismo turismo2 = null;
+        Iterator<Turismo> iterator = coleccionTurismos.iterator();
+        while (iterator.hasNext()) {
+            turismo2 = iterator.next();
+            if (turismo2.getMatricula().equals(turismo.getMatricula())) {
+                return turismo2;
+            }
+        }
         if (turismo == null) {
             throw new NullPointerException("ERROR: No se puede buscar un turismo nulo.");
         }
-        if (coleccionTurismos.contains(turismo)) {
-            turismo2 = (coleccionTurismos.get(coleccionTurismos.indexOf(turismo)));
-        }
-        return turismo2;
+        return null;
     }
 
     // MÉTODO borrar

@@ -102,20 +102,26 @@ public class Turismo {
     // MÉTODO hashCode & equals
     @Override
     public int hashCode() {
-        return Objects.hash(getMarca(), getModelo(), getCilindrada(), getMatricula());
+        return Objects.hash(matricula);
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Turismo turismo)) return false;
-        return getCilindrada() == turismo.getCilindrada() && Objects.equals(getMarca(), turismo.getMarca()) && Objects.equals(getModelo(), turismo.getModelo()) && Objects.equals(getMatricula(), turismo.getMatricula());
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Turismo other = (Turismo) obj;
+        return Objects.equals(matricula, other.matricula);
     }
+
 
     // MÉTODO toString
     @Override
     public String toString() {
-        return (String.format("%s %s (%sCV) - %s", marca, modelo, cilindrada, matricula));
+        return String.format("%s %s (%sCV) - %s", getMarca(), getModelo(), getCilindrada(), getMatricula(), "disponible");
     }
 
 }

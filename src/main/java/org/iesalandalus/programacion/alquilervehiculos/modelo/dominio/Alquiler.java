@@ -115,14 +115,20 @@ public class Alquiler {
     // MÉTODO hashCode & equals
     @Override
     public int hashCode() {
-        return Objects.hash(getCliente(), getTurismo(), getFechaAlquiler(), getFechaDevolucion());
+        return Objects.hash(cliente, fechaAlquiler, turismo);
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Alquiler alquiler)) return false;
-        return Objects.equals(getCliente(), alquiler.getCliente()) && Objects.equals(getTurismo(), alquiler.getTurismo()) && Objects.equals(getFechaAlquiler(), alquiler.getFechaAlquiler()) && Objects.equals(getFechaDevolucion(), alquiler.getFechaDevolucion());
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Alquiler other = (Alquiler) obj;
+        return Objects.equals(cliente, other.cliente) && Objects.equals(fechaAlquiler, other.fechaAlquiler)
+                && Objects.equals(turismo, other.turismo);
     }
 
     // MÉTODO toString

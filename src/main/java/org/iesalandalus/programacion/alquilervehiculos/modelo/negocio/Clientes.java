@@ -4,6 +4,7 @@ import org.iesalandalus.programacion.alquilervehiculos.modelo.dominio.Cliente;
 
 import javax.naming.OperationNotSupportedException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Clientes {
@@ -31,7 +32,7 @@ public class Clientes {
         if (cliente == null) {
             throw new NullPointerException("ERROR: No se puede insertar un cliente nulo.");
         }
-        if (coleccionClientes.indexOf(cliente) != -1) {
+        if (coleccionClientes.contains(cliente)) {
             throw new OperationNotSupportedException("ERROR: Ya existe un cliente con ese DNI.");
         }
         coleccionClientes.add(cliente);
@@ -39,11 +40,16 @@ public class Clientes {
 
     // MÉTODO buscar
     public Cliente buscar(Cliente cliente) {
+        Cliente cliente2 = null;
         if (cliente == null) {
             throw new NullPointerException("ERROR: No se puede buscar un cliente nulo.");
         }
-        if (coleccionClientes.indexOf(cliente) != -1) {
-            return (coleccionClientes.get(coleccionClientes.indexOf(cliente)));
+        Iterator<Cliente> iterator = coleccionClientes.iterator();
+        while (iterator.hasNext()) {
+            cliente2 = iterator.next();
+            if (cliente2.getDni().equals(cliente.getDni())) {
+                return cliente2;
+            }
         }
         return null;
     }
@@ -53,7 +59,7 @@ public class Clientes {
         if (cliente == null) {
             throw new NullPointerException("ERROR: No se puede borrar un cliente nulo.");
         }
-        if (coleccionClientes.indexOf(cliente) != -1) {
+        if (coleccionClientes.contains(cliente)) {
             coleccionClientes.remove(coleccionClientes.indexOf(cliente));
         } else {
             throw new OperationNotSupportedException("ERROR: No existe ningún cliente con ese DNI.");
